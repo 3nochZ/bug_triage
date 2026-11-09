@@ -1,0 +1,16 @@
+.env
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+data/raw/
+data/cache/
+results/*.png
+results/checkpoint*
+models/checkpoint*
+distilbert_saved/
+.pytest_cache/
