@@ -1,0 +1,69 @@
+{
+  "model_name": "baseline_1_rules",
+  "sample_count": 202,
+  "macro_f1": 0.5553997215722283,
+  "accuracy": 0.6683168316831684,
+  "avg_latency_ms": 0.5391099256494182,
+  "avg_cost_usd": 0.0,
+  "total_wall_clock_ms": 109.22802899949602,
+  "confusion_matrix": {
+    "labels": [
+      "bug",
+      "feature",
+      "question",
+      "docs"
+    ],
+    "matrix": [
+      [
+        55,
+        1,
+        0,
+        4
+      ],
+      [
+        15,
+        34,
+        3,
+        8
+      ],
+      [
+        20,
+        1,
+        1,
+        2
+      ],
+      [
+        9,
+        2,
+        2,
+        45
+      ]
+    ]
+  },
+  "per_class": {
+    "bug": {
+      "precision": 0.5555555555555556,
+      "recall": 0.9166666666666666,
+      "f1_score": 0.6918238993710691,
+      "support": 60.0
+    },
+    "feature": {
+      "precision": 0.8947368421052632,
+      "recall": 0.5666666666666667,
+      "f1_score": 0.6938775510204082,
+      "support": 60.0
+    },
+    "question": {
+      "precision": 0.16666666666666666,
+      "recall": 0.041666666666666664,
+      "f1_score": 0.06666666666666667,
+      "support": 24.0
+    },
+    "docs": {
+      "precision": 0.7627118644067796,
+      "recall": 0.7758620689655172,
+      "f1_score": 0.7692307692307693,
+      "support": 58.0
+    }
+  }
+}
