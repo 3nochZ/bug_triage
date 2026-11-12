@@ -1,0 +1,69 @@
+{
+  "model_name": "distilbert_finetuned",
+  "sample_count": 202,
+  "macro_f1": 0.5437889806483421,
+  "accuracy": 0.6683168316831684,
+  "avg_latency_ms": 69.5424874505052,
+  "avg_cost_usd": 5.000000000000001e-05,
+  "total_wall_clock_ms": 14161.234825001884,
+  "confusion_matrix": {
+    "labels": [
+      "bug",
+      "feature",
+      "question",
+      "docs"
+    ],
+    "matrix": [
+      [
+        30,
+        4,
+        0,
+        26
+      ],
+      [
+        0,
+        48,
+        0,
+        12
+      ],
+      [
+        14,
+        9,
+        1,
+        0
+      ],
+      [
+        1,
+        1,
+        0,
+        56
+      ]
+    ]
+  },
+  "per_class": {
+    "bug": {
+      "precision": 0.6666666666666666,
+      "recall": 0.5,
+      "f1_score": 0.5714285714285714,
+      "support": 60.0
+    },
+    "feature": {
+      "precision": 0.7741935483870968,
+      "recall": 0.8,
+      "f1_score": 0.7868852459016393,
+      "support": 60.0
+    },
+    "question": {
+      "precision": 1.0,
+      "recall": 0.041666666666666664,
+      "f1_score": 0.08,
+      "support": 24.0
+    },
+    "docs": {
+      "precision": 0.5957446808510638,
+      "recall": 0.9655172413793104,
+      "f1_score": 0.7368421052631579,
+      "support": 58.0
+    }
+  }
+}
