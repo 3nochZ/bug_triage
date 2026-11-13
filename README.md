@@ -98,6 +98,22 @@ python run_milestone4.py
 python src/failure_analysis.py
 ```
 
+### Step 5: Live Interactive Demonstration
+
+We provide two live demo interfaces ready for presentations:
+
+1. **Interactive Terminal Demo (`demo.py`)**:
+   ```bash
+   python demo.py
+   ```
+   Select pre-configured GitHub issues (tracebacks, feature proposals, usage questions, doc bugs, edge cases) or type any custom issue to see instant side-by-side multi-model predictions, latencies, confidence scores, and Project 2 adaptive routing decisions in a colorized table.
+
+2. **Interactive Web UI (`web_demo.py`)**:
+   ```bash
+   python web_demo.py
+   ```
+   Open `http://localhost:5000` in your browser. Provides preset one-click buttons, custom issue input, latency/cost gauges, and real-time router decisions.
+
 ---
 
 ## 4. Honest Evaluation & Benchmark Results
