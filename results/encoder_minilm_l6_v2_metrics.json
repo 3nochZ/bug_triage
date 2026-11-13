@@ -3,9 +3,9 @@
   "sample_count": 202,
   "macro_f1": 0.6380763937916626,
   "accuracy": 0.7079207920792079,
-  "avg_latency_ms": 0.43099753960326204,
+  "avg_latency_ms": 0.3616644406083471,
   "avg_cost_usd": 1e-05,
-  "total_wall_clock_ms": 90.83229300085804,
+  "total_wall_clock_ms": 76.60762800151133,
   "confusion_matrix": {
     "labels": [
       "bug",

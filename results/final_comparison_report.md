@@ -6,10 +6,10 @@ Benchmark evaluating 4 approaches on chronological test split (202 issues) from 
 
 | Approach | Macro-F1 | Accuracy | Latency (ms/issue) | Est. Cost ($/issue) |
 | :--- | :---: | :---: | :---: | :---: |
-| **Baseline 1: Deterministic Keyword Rules** | 0.5554 | 0.6683 | 0.54 ms | $0.000000 |
-| **Baseline 2: TF-IDF + Logistic Regression** | 0.8044 | 0.8515 | 2.22 ms | $0.000001 |
-| **Model 3: all-MiniLM-L6-v2 + Logistic Regression** | 0.6381 | 0.7079 | 0.43 ms | $0.000010 |
-| **Model 4: Fine-Tuned DistilBERT (distilbert-base-uncased)** | 0.5438 | 0.6683 | 69.54 ms | $0.000050 |
+| **Baseline 1: Deterministic Keyword Rules** | 0.5554 | 0.6683 | 0.46 ms | $0.000000 |
+| **Baseline 2: TF-IDF + Logistic Regression** | 0.8044 | 0.8515 | 1.28 ms | $0.000001 |
+| **Model 3: all-MiniLM-L6-v2 + Logistic Regression** | 0.6381 | 0.7079 | 0.32 ms | $0.000010 |
+| **Model 4: Fine-Tuned DistilBERT (distilbert-base-uncased)** | 0.5438 | 0.6683 | 52.09 ms | $0.000050 |
 
 ## 2. Per-Class F1 Breakdown
 

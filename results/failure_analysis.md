@@ -63,9 +63,9 @@ Total test issues evaluated: **202**.
 
 | Model | Inference Latency / Issue | Estimated Cost / Issue | Macro-F1 | Economic Trade-off |
 | :--- | :---: | :---: | :---: | :--- |
-| **Baseline 2: TF-IDF + LogReg** | 2.22 ms | $0.000001 | 0.8044 | Optimal speed, zero compute overhead, highest F1 |
-| **Model 3: all-MiniLM-L6-v2** | 0.43 ms | $0.000010 | 0.6381 | Fast cached inference, dense representation |
-| **Model 4: DistilBERT (Fine-Tuned)** | 69.54 ms | $0.000050 | 0.5438 | **31x slower latency, 50x higher cost**, lower F1 on small corpus |
+| **Baseline 2: TF-IDF + LogReg** | 1.28 ms | $0.000001 | 0.8044 | Optimal speed, zero compute overhead, highest F1 |
+| **Model 3: all-MiniLM-L6-v2** | 0.32 ms | $0.000010 | 0.6381 | Fast cached inference, dense representation |
+| **Model 4: DistilBERT (Fine-Tuned)** | 52.09 ms | $0.000050 | 0.5438 | **31x slower latency, 50x higher cost**, lower F1 on small corpus |
 
 DistilBERT requires tokenizing and running full 6-layer self-attention over the CPU for every issue, incurring substantial latency without accuracy benefits when training data is constrained (802 samples).
 
