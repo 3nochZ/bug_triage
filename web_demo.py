@@ -38,91 +38,372 @@ HTML_TEMPLATE = """
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Bug-Report Triage: Live Multi-Model Demo</title>
+  <title>Bug-Report Triage</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f172a;
-      --card-bg: #1e293b;
-      --border: #334155;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --primary: #38bdf8;
-      --bug: #ef4444;
-      --feature: #22c55e;
-      --question: #eab308;
-      --docs: #06b6d4;
+      --bg: #09090b;
+      --surface: #121215;
+      --raised: #18181b;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(255, 255, 255, 0.2);
+      --border-focus: rgba(255, 255, 255, 0.4);
+      --text-primary: #f4f4f5;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --accent: #f4f4f5;
+      --accent-text: #09090b;
+      --tag-bg: #222226;
+      --tag-border: rgba(255, 255, 255, 0.12);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 2rem 1rem; line-height: 1.5; }
-    .container { max-width: 1000px; margin: 0 auto; }
-    header { text-align: center; margin-bottom: 2rem; }
-    header h1 { font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem; }
-    header p { color: var(--text-muted); }
 
-    .presets { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; justify-content: center; }
-    .preset-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.5rem 0.9rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
-    .preset-btn:hover { border-color: var(--primary); color: var(--primary); }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    .form-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2); }
-    .form-group { margin-bottom: 1rem; }
-    label { display: block; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.4rem; }
-    input[type="text"], textarea { width: 100%; background: #0b1120; border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem; color: var(--text); font-size: 0.95rem; }
-    input[type="text"]:focus, textarea:focus { outline: none; border-color: var(--primary); }
-    textarea { min-height: 120px; resize: vertical; }
-    .submit-btn { width: 100%; background: #0284c7; color: white; border: none; padding: 0.85rem; border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: background 0.2s; }
-    .submit-btn:hover { background: #0369a1; }
+    body {
+      background-color: var(--bg);
+      color: var(--text-primary);
+      font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      padding: 48px 24px;
+      -webkit-font-smoothing: antialiased;
+    }
 
-    .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
-    .model-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; }
-    .model-name { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; margin-bottom: 0.75rem; text-transform: uppercase; }
-    .badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 9999px; font-weight: 700; font-size: 0.95rem; text-transform: uppercase; margin-bottom: 1rem; }
-    .badge.bug { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
-    .badge.feature { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); }
-    .badge.question { background: rgba(234, 179, 8, 0.2); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.4); }
-    .badge.docs { background: rgba(6, 182, 212, 0.2); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.4); }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
 
-    .stat-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.4rem; color: var(--text-muted); }
-    .stat-val { color: var(--text); font-weight: 600; }
+    header {
+      margin-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+    }
 
-    .router-card { background: #132e2b; border: 1px solid #14b8a6; border-radius: 10px; padding: 1.25rem; }
-    .router-title { color: #2dd4bf; font-weight: 700; font-size: 1rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
-    .router-body { font-size: 0.9rem; color: #ccfbf1; }
+    .header-meta {
+      font-family: "Geist Mono", monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+
+    header h1 {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+    }
+
+    header p {
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .section-label {
+      font-family: "Geist Mono", monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .presets-wrap {
+      margin-bottom: 24px;
+    }
+
+    .presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .preset-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      font-family: "Geist", sans-serif;
+      font-weight: 400;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .preset-btn:hover {
+      border-color: var(--border-hover);
+      color: var(--text-primary);
+    }
+
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      background: var(--raised);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 12px;
+      color: var(--text-primary);
+      font-size: 13px;
+      font-family: inherit;
+      transition: border-color 0.15s;
+    }
+
+    input[type="text"]:focus, textarea:focus {
+      outline: none;
+      border-color: var(--border-focus);
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+      font-family: "Geist Mono", monospace;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .submit-btn {
+      background: var(--accent);
+      color: var(--accent-text);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      transition: opacity 0.15s;
+    }
+
+    .submit-btn:hover {
+      opacity: 0.9;
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .results-section {
+      margin-top: 32px;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .results-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .model-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .model-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .model-name {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    .model-tag {
+      font-family: "Geist Mono", monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .prediction-badge-wrap {
+      margin-bottom: 20px;
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: "Geist Mono", monospace;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      background: var(--tag-bg);
+      border: 1px solid var(--tag-border);
+      padding: 4px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.02em;
+    }
+
+    .stats-list {
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: var(--text-muted);
+    }
+
+    .stat-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .stat-val {
+      font-family: "Geist Mono", monospace;
+      color: var(--text-secondary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .router-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .router-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .router-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--text-primary);
+    }
+
+    .router-title {
+      font-family: "Geist Mono", monospace;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .router-body {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .router-body strong {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .router-meta {
+      margin-top: 6px;
+      font-family: "Geist Mono", monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>Bug-Report Triage: Live Multi-Model Demo</h1>
-      <p>Multi-Model Comparison: Regex Baseline, TF-IDF + LogReg, MiniLM Dense Embeddings, and DistilBERT</p>
+      <div class="header-meta">Scenario 1 • Encoder Triage</div>
+      <h1>Bug-Report Triage System</h1>
+      <p>Benchmark inference and adaptive routing evaluation across scikit-learn issues</p>
     </header>
 
-    <div class="presets">
-      <button class="preset-btn" onclick="setPreset(0)">Preset 1: Traceback Bug</button>
-      <button class="preset-btn" onclick="setPreset(1)">Preset 2: GPU Feature Request</button>
-      <button class="preset-btn" onclick="setPreset(2)">Preset 3: Usage Question</button>
-      <button class="preset-btn" onclick="setPreset(3)">Preset 4: Documentation Link 404</button>
-      <button class="preset-btn" onclick="setPreset(4)">Preset 5: Tricky WCAG Defect</button>
+    <div class="presets-wrap">
+      <span class="section-label">Preset test scenarios</span>
+      <div class="presets">
+        <button class="preset-btn" onclick="setPreset(0)">Traceback bug</button>
+        <button class="preset-btn" onclick="setPreset(1)">Feature request</button>
+        <button class="preset-btn" onclick="setPreset(2)">Usage inquiry</button>
+        <button class="preset-btn" onclick="setPreset(3)">Documentation 404</button>
+        <button class="preset-btn" onclick="setPreset(4)">Edge defect (WCAG)</button>
+      </div>
     </div>
 
     <div class="form-card">
       <form id="triage-form" onsubmit="handleTriage(event)">
         <div class="form-group">
-          <label>Issue Title</label>
-          <input type="text" id="title" required placeholder="e.g. ValueError: Found array with 0 sample(s)...">
+          <label for="title">Issue title</label>
+          <input type="text" id="title" required placeholder="ValueError: Found array with 0 sample(s)...">
         </div>
         <div class="form-group">
-          <label>Issue Body / Description</label>
-          <textarea id="body" required placeholder="Paste full error logs, tracebacks, or feature description..."></textarea>
+          <label for="body">Issue body</label>
+          <textarea id="body" required placeholder="Paste traceback, expected behavior, or issue text..."></textarea>
         </div>
-        <button type="submit" class="submit-btn" id="submit-btn">Run Multi-Model Triage</button>
+        <div class="form-actions">
+          <button type="submit" class="submit-btn" id="submit-btn">Run triage</button>
+        </div>
       </form>
     </div>
 
-    <div id="results-section" style="display: none;">
+    <div id="results-section" class="results-section" style="display: none;">
+      <span class="section-label">Model predictions</span>
       <div class="results-grid" id="results-grid"></div>
-      <div class="router-card" id="router-card">
-        <div class="router-title">⚡ Project 2 Adaptive Router Decision</div>
+      <div class="router-card">
+        <div class="router-header">
+          <div class="router-dot"></div>
+          <div class="router-title">Project 2 router policy</div>
+        </div>
         <div class="router-body" id="router-text"></div>
       </div>
     </div>
@@ -165,7 +446,7 @@ HTML_TEMPLATE = """
       const btn = document.getElementById('submit-btn');
 
       btn.disabled = true;
-      btn.textContent = 'Running Inference across all 4 models...';
+      btn.textContent = 'Evaluating...';
 
       try {
         const res = await fetch('/predict', {
@@ -179,7 +460,7 @@ HTML_TEMPLATE = """
         alert('Inference error: ' + err);
       } finally {
         btn.disabled = false;
-        btn.textContent = 'Run Multi-Model Triage';
+        btn.textContent = 'Run triage';
       }
     }
 
@@ -188,10 +469,10 @@ HTML_TEMPLATE = """
       grid.innerHTML = '';
 
       const modelMeta = [
-        { key: 'rules', name: 'Baseline 1: Rules' },
-        { key: 'tfidf', name: 'Baseline 2: TF-IDF (Best)' },
-        { key: 'minilm', name: 'Model 3: MiniLM-L6-v2' },
-        { key: 'distilbert', name: 'Model 4: DistilBERT' }
+        { key: 'rules', name: 'Regex rules', tag: 'Baseline 1' },
+        { key: 'tfidf', name: 'TF-IDF + LogReg', tag: 'Baseline 2' },
+        { key: 'minilm', name: 'MiniLM-L6-v2', tag: 'Model 3' },
+        { key: 'distilbert', name: 'DistilBERT', tag: 'Model 4' }
       ];
 
       modelMeta.forEach(m => {
@@ -199,11 +480,29 @@ HTML_TEMPLATE = """
         const card = document.createElement('div');
         card.className = 'model-card';
         card.innerHTML = `
-          <div class="model-name">${m.name}</div>
-          <div><span class="badge ${p.label}">${p.label}</span></div>
-          <div class="stat-row"><span>Confidence</span><span class="stat-val">${(p.confidence * 100).toFixed(1)}%</span></div>
-          <div class="stat-row"><span>Latency</span><span class="stat-val">${p.latency_ms.toFixed(2)} ms</span></div>
-          <div class="stat-row"><span>Est. Cost</span><span class="stat-val">$${p.cost_usd.toFixed(6)}</span></div>
+          <div>
+            <div class="model-header">
+              <span class="model-name">${m.name}</span>
+              <span class="model-tag">${m.tag}</span>
+            </div>
+            <div class="prediction-badge-wrap">
+              <span class="badge">${p.label}</span>
+            </div>
+          </div>
+          <div class="stats-list">
+            <div class="stat-row">
+              <span>Confidence</span>
+              <span class="stat-val">${(p.confidence * 100).toFixed(1)}%</span>
+            </div>
+            <div class="stat-row">
+              <span>Latency</span>
+              <span class="stat-val">${p.latency_ms.toFixed(2)} ms</span>
+            </div>
+            <div class="stat-row">
+              <span>Cost</span>
+              <span class="stat-val">$${p.cost_usd.toFixed(6)}</span>
+            </div>
+          </div>
         `;
         grid.appendChild(card);
       });
@@ -211,13 +510,20 @@ HTML_TEMPLATE = """
       const tfidf = data.tfidf;
       const routerText = document.getElementById('router-text');
       if (tfidf.confidence >= 0.80) {
-        routerText.innerHTML = `<strong>FAST-PATH ACCEPTED:</strong> Local TF-IDF model returned <strong>${(tfidf.confidence * 100).toFixed(1)}%</strong> confidence.<br>Issue triaged as <strong>${tfidf.label.toUpperCase()}</strong> in <strong>${tfidf.latency_ms.toFixed(2)} ms</strong> at <strong>$${tfidf.cost_usd.toFixed(6)}</strong> compute cost.<br><small style="color: #5eead4;">Project 2 router saves ~$0.03 and 800ms compared to an external LLM call.</small>`;
+        routerText.innerHTML = `
+          Fast-path routing accepted. Local TF-IDF model returned <strong>${(tfidf.confidence * 100).toFixed(1)}%</strong> confidence.<br>
+          Issue triaged as <strong>${tfidf.label}</strong> in <strong>${tfidf.latency_ms.toFixed(2)} ms</strong> at <strong>$${tfidf.cost_usd.toFixed(6)}</strong> compute cost.
+          <div class="router-meta">Avoided external LLM invocation • Saved ~$0.03 and 800ms per issue</div>
+        `;
       } else {
-        routerText.innerHTML = `<strong>ESCALATION TO LLM:</strong> TF-IDF confidence is marginal (<strong>${(tfidf.confidence * 100).toFixed(1)}%</strong> < 80%).<br>Potential edge case or ambiguous intent detected. The Project 2 router triggers a fallback reasoning agent for zero-shot classification.`;
+        routerText.innerHTML = `
+          Escalation triggered. Primary model confidence is marginal (<strong>${(tfidf.confidence * 100).toFixed(1)}%</strong> < 80.0%).<br>
+          Potential boundary ambiguity detected between target classes.
+          <div class="router-meta">Routed to downstream reasoning agent for zero-shot verification</div>
+        `;
       }
 
       document.getElementById('results-section').style.display = 'block';
-      document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
     }
   </script>
 </body>
