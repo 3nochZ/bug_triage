@@ -120,24 +120,12 @@ def run_single_demo(models, title: str, body: str, true_label: str = ""):
 
     console.print(table)
 
-    # simulate project 2 adaptive routing decision
-    tfidf_pred = predictions[1]
-    tfidf_conf = tfidf_pred.confidence if tfidf_pred.confidence is not None else 0.0
-
-    if tfidf_conf >= 0.80:
-        action = (
-            f"Fast-path accepted: TF-IDF confidence is [bold]{tfidf_conf*100:.1f}%[/bold] (>= 80.0%).\n"
-            f"Classified as [bold]{tfidf_pred.label}[/bold] in {tfidf_pred.latency_ms:.2f} ms (${tfidf_pred.cost_usd:.6f} compute cost).\n"
-            f"[dim]Avoided external LLM invocation • Saved ~$0.03 and ~800 ms per issue[/dim]"
-        )
-    else:
-        action = (
-            f"Escalation triggered: Local model confidence is marginal ([bold]{tfidf_conf*100:.1f}%[/bold] < 80.0%).\n"
-            f"Class boundary ambiguity detected between target classes.\n"
-            f"[dim]Routed to downstream reasoning agent for zero-shot verification[/dim]"
-        )
-
-    console.print(Panel(action, title="[bold]Project 2 adaptive router decision[/bold]", border_style="grey50"))
+    # Project 2 adaptive routing decision (commented out for now; will revisit later)
+    # tfidf_pred = predictions[1]
+    # tfidf_conf = tfidf_pred.confidence if tfidf_pred.confidence is not None else 0.0
+    # if tfidf_conf >= 0.80:
+    #     action = (...)
+    # console.print(Panel(action, title="[bold]Project 2 adaptive router decision[/bold]", border_style="grey50"))
     console.print()
 
 

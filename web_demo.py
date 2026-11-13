@@ -366,7 +366,7 @@ HTML_TEMPLATE = """
     <header>
       <div class="header-meta">Scenario 1 • Encoder Triage</div>
       <h1>Bug-Report Triage System</h1>
-      <p>Benchmark inference and adaptive routing evaluation across scikit-learn issues</p>
+      <p>Benchmark inference and multi-model evaluation across scikit-learn issues</p>
     </header>
 
     <div class="presets-wrap">
@@ -399,6 +399,7 @@ HTML_TEMPLATE = """
     <div id="results-section" class="results-section" style="display: none;">
       <span class="section-label">Model predictions</span>
       <div class="results-grid" id="results-grid"></div>
+      <!-- Project 2 router policy (commented out for now; will revisit later)
       <div class="router-card">
         <div class="router-header">
           <div class="router-dot"></div>
@@ -406,6 +407,7 @@ HTML_TEMPLATE = """
         </div>
         <div class="router-body" id="router-text"></div>
       </div>
+      -->
     </div>
   </div>
 
@@ -507,6 +509,7 @@ HTML_TEMPLATE = """
         grid.appendChild(card);
       });
 
+      /* Project 2 router policy logic (commented out for now; will revisit later)
       const tfidf = data.tfidf;
       const routerText = document.getElementById('router-text');
       if (tfidf.confidence >= 0.80) {
@@ -522,6 +525,7 @@ HTML_TEMPLATE = """
           <div class="router-meta">Routed to downstream reasoning agent for zero-shot verification</div>
         `;
       }
+      */
 
       document.getElementById('results-section').style.display = 'block';
     }
